@@ -22,7 +22,7 @@ spec:
       - name: nmap
         image: instrumentisto/nmap
         volumeMounts:
-        - mountPath: "/data"
+        - mountPath: "/nmap"
           name: scanner-storage
         command: ["nmap"]
-        args: ["-Pn","-sS","192.168.1.49","-oN","/data/example.txt"]
+        args: ["-Pn","-sS","-iL","/nmap/targets.txt","-oN","/nmap/results/%d-%m-%Y"]

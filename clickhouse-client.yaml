@@ -20,5 +20,5 @@ spec:
       - name: clickhouse-client
         image: yandex/clickhouse-client
         command: ["clickhouse-client"]
-        args: ["-h","clickhouse-server-service","--query","SELECT COUNT(*) FROM datasets.hits_v1"]
+        args: ["-h","clickhouse-server-service","--query","SELECT * FROM datasets.hits_v1"]
 
