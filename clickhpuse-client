@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clickhouse-client
+spec:
+  selector:
+    matchLabels:
+      run: clickhouse-client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: clickhouse-client
+    spec:
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: claim
+      containers:
+      - name: clickhouse-client
+        image: yandex/clickhouse-client
+        command: ["clickhouse-client"]
+        args: ["-h","clickhouse-server-service","--query","SELECT COUNT(*) FROM datasets.hits_v1"]
+

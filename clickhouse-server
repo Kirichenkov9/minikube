@@ -1,0 +1,50 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clickhouse-server
+spec:
+  selector:
+    matchLabels:
+      run: clickhouse-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: clickhouse-server
+    spec:
+      volumes:
+      - name: clickhouse
+        persistentVolumeClaim:
+          claimName: claim
+      containers:
+      - name: clickhouse-server
+        image: yandex/clickhouse-server
+        ports:
+        -  containerPort: 9000
+        -  containerPort: 8123
+        volumeMounts:
+        - mountPath: /var/lib/clickhouse
+          name: clickhouse
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clickhouse-server-service
+  labels:
+    run: clickhouse-server
+spec:
+  type: NodePort
+  ports:
+  - port: 9000
+    targetPort: 9000
+    protocol: TCP
+    name: p1
+  - port: 8123
+    targetPort: 8123
+    protocol: TCP
+    name: p2
+  selector:
+    run: clickhouse-server
+
